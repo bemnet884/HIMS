@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signUpSchema } from "@/lib/zod"; // Assuming you have a schema for sign up
-import LoadingButton from "@/components/loading-button";
 import { useState } from "react";
 import ErrorMessage from "@/components/error-message";
 import { Button } from "@/components/ui/button";
@@ -113,7 +112,6 @@ export default function SignUp() {
                 )}
               />
 
-              <LoadingButton pending={form.formState.isSubmitting} />
             </form>
           </Form>
         </CardContent>
