@@ -5,19 +5,20 @@ import { ShineyButton } from "@/components/ShineyButton";
 import HeadingText from "@/components/heading-text";
 import { Icons } from "@/components/icons";
 import MockHIMSUi from "@/components/mock-HIMS-ui";
-import { AnimatedList, AnimatedListItem } from "@/components/ui/animated-list";
-import { AlertCircle, ArrowRight, BarChart, Check, Clock, Cross, ShoppingCart, Star, TrendingDown, X } from "lucide-react";
+import { AnimatedList } from "@/components/ui/animated-list";
+import { Check, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-//import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
-//import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"
+
+/*
 const ListOfPainPoints = [
   "Running out of stock frequently",
   "Inaccurate inventory counts",
   "Time-consuming manual updates",
   "Difficulty forecasting demand",
   "Lack of sales insights",
-];
+]; */
+
 
 const ListOfSolutions = [
   "Real-time stock alerts",
@@ -28,6 +29,8 @@ const ListOfSolutions = [
 ];
 
 export default function Home() {
+
+  /*
   const codeSnippet = `await fetch("http://localhost:3000/api/v1/events", {
   method: "POST",
   body: JSON.stringify({
@@ -41,7 +44,7 @@ export default function Home() {
   headers: {
     Authorization: "Bearer <YOUR_API_KEY>"
   }
-})`
+})`*/
   return (
     <>
       <section>

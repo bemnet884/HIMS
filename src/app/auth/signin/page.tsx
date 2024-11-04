@@ -18,14 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import { signInSchema } from "@/lib/zod";
-import LoadingButton from "@/components/loading-button";
 import { useState } from "react";
 import ErrorMessage from "@/components/error-message";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react"; // Importing NextAuth's signIn method
 import Link from "next/link";
-import { ShineyButton } from "@/components/ShineyButton";
-import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function SignIn() {
   const [globalError, setGlobalError] = useState<string>("");
