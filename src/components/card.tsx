@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import React from 'react';
 import { Icon as LucideIcon } from 'lucide-react';
-import { LineChartComponent } from "./(charts)/linechart"; // Placeholder for mini-chart component
+import { LineChartComponent } from "./(charts)/linechart";
 
 // Define prop types
 interface MetricCardProps {
