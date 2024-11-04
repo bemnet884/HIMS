@@ -19,47 +19,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: { label: "Password", type: "password", placeholder: "Password" },
             },
             async authorize(credentials) {
-                // Type assertion to explicitly set credentials as string
                 const email = credentials?.email as string;
                 const password = credentials?.password as string;
 
-                // Validate the credentials input
                 const parsedCredentials = signInSchema.safeParse({ email, password });
                 if (!parsedCredentials.success) {
                     console.error("Invalid credentials:", parsedCredentials.error.errors);
                     return null;
                 }
 
-                // Find the user by email
                 const user = await prisma.user.findUnique({
                     where: { email },
-                    include: { role: true } // Include the role to access role name
+                    include: { role: true }
                 });
 
                 if (user && user.passwordHash) {
-                    // Validate the password
                     const isValidPassword = await compare(password, user.passwordHash);
                     if (isValidPassword) {
                         return { id: user.id.toString(), name: user.name, email: user.email, role: user.role?.name };
                     }
                 }
 
-                // If user is not found or password is invalid, return null
                 return null;
             }
         })
     ],
     callbacks: {
-        async signIn({ user, account, profile }) {
+        async signIn({ user }) {
             if (!user?.email) return false;
 
-            // Check if the user already exists in the database
             let dbUser = await prisma.user.findUnique({
                 where: { email: user.email },
             });
 
             if (!dbUser) {
-                // Create a new user if not found, including passwordHash for required field
                 const defaultRole = await prisma.role.findFirst({ where: { name: "user" } }) ?? { id: 1 };
                 dbUser = await prisma.user.create({
                     data: {
@@ -70,7 +63,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     },
                 });
             } else {
-                // Update user information if they already exist
                 dbUser = await prisma.user.update({
                     where: { email: user.email },
                     data: {
@@ -104,7 +96,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     session: {
         strategy: "jwt",
     },
-    jwt: {
-        secret: process.env.JWT_SECRET,
-    },
+    secret: process.env.JWT_SECRET, // Place the secret here
 });
