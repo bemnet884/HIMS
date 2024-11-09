@@ -3,53 +3,6 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  // Seed Roles
-  const adminRole = await prisma.role.create({
-    data: {
-      name: 'Admin',
-    },
-  })
-
-  const managerRole = await prisma.role.create({
-    data: {
-      name: 'Manager',
-    },
-  })
-
-  const employeeRole = await prisma.role.create({
-    data: {
-      name: 'Employee',
-    },
-  })
-
-  // Seed Users
-  const adminUser = await prisma.user.create({
-    data: {
-      name: 'Alice Admin',
-      email: 'alice.admin@example.com',
-      passwordHash: 'hashed_password_admin', // Replace with a hashed password
-      roleId: adminRole.id,
-    },
-  })
-
-  const managerUser = await prisma.user.create({
-    data: {
-      name: 'Bob Manager',
-      email: 'bob.manager@example.com',
-      passwordHash: 'hashed_password_manager', // Replace with a hashed password
-      roleId: managerRole.id,
-    },
-  })
-
-  const employeeUser = await prisma.user.create({
-    data: {
-      name: 'Charlie Employee',
-      email: 'charlie.employee@example.com',
-      passwordHash: 'hashed_password_employee', // Replace with a hashed password
-      roleId: employeeRole.id,
-    },
-  })
-
   // Seed Products
   const product1 = await prisma.product.create({
     data: {
@@ -75,7 +28,6 @@ async function main() {
       productId: product1.id,
       quantity: 2,
       total: 21.98,
-      employeeId: employeeUser.id,
     },
   })
 
@@ -84,7 +36,6 @@ async function main() {
       productId: product2.id,
       quantity: 1,
       total: 25.50,
-      employeeId: employeeUser.id,
     },
   })
 
@@ -95,7 +46,6 @@ async function main() {
       quantity: 50,
       total: 549.50,
       supplier: 'Supplier XYZ',
-      employeeId: managerUser.id,
     },
   })
 
@@ -105,7 +55,6 @@ async function main() {
       quantity: 20,
       total: 510.00,
       supplier: 'Supplier ABC',
-      employeeId: managerUser.id,
     },
   })
 
@@ -114,7 +63,6 @@ async function main() {
     data: {
       description: 'Office Supplies',
       amount: 100.00,
-      employeeId: adminUser.id,
     },
   })
 
@@ -122,7 +70,6 @@ async function main() {
     data: {
       description: 'Utility Bills',
       amount: 200.00,
-      employeeId: adminUser.id,
     },
   })
 

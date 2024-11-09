@@ -33,9 +33,7 @@ export default async function ExpenseList() {
                 <tr key={expense.id}>
                   <td className="border p-2">{expense.description}</td>
                   <td className="border p-2">${expense.amount}</td>
-                  <td className="border p-2">{expense.employeeId}</td>
                   <td className="border p-2">{new Date(expense.expenseDate).toLocaleDateString()}</td>
-                  <td className="border p-2">{expense.employee.name}</td>
                   <td className="border p-2">
                     <Link href={`/expenses/${expense.id}`}>
                       <Button>View</Button>

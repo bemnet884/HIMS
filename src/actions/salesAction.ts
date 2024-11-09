@@ -3,7 +3,7 @@
 import prisma from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
-export async function createSale(data: { productId: number; quantity: number; employeeId: number }) {
+export async function createSale(data: { productId: number; quantity: number }) {
   // Find the product to get its price and current stock
   const product = await prisma.product.findUnique({
     where: { id: data.productId },
@@ -27,7 +27,6 @@ export async function createSale(data: { productId: number; quantity: number; em
       productId: data.productId,
       quantity: data.quantity,
       total,
-      employeeId: data.employeeId,
     },
   });
 
@@ -45,14 +44,14 @@ export async function createSale(data: { productId: number; quantity: number; em
 
 export async function getSales() {
   return await prisma.sale.findMany({
-    include: { product: true, employee: true },
+    include: { product: true },
   });
 }
 
 export async function getSaleById(id: number) {
   return await prisma.sale.findUnique({
     where: { id },
-    include: { product: true, employee: true },
+    include: { product: true },
   });
 }
 
@@ -83,8 +82,9 @@ export async function getMonthlySalesData() {
 
   return monthlyData;
 }
+
 export async function updateSale(id: number, data: {
-  productId?: number; quantity?: number;  total?: number; employeeId?: number;
+  productId?: number; quantity?: number; total?: number;
 }) {
   await prisma.sale.update({
     where: { id },

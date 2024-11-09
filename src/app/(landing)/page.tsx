@@ -330,7 +330,7 @@ export default function Home() {
           </div>
 
           <ShineyButton
-            href="/auth/signin"
+            href="sign-in"
             className="relative z-10 h-14 w-full max-w-xs text-base shadow-lg transition-shadow duration-300 hover:shadow-xl"
           >
             Start For Free Today
@@ -349,7 +349,8 @@ export default function Home() {
               className='relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]'
             />
           </div>
-          <div>
+          {/**
+           *    <div>
             <div className="mx-auto max-w-6xl px-6 lg:px-8">
               <div className="mt-16 flow-root sm:mt-24">
                 <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
@@ -365,9 +366,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div aria-hidden='true' className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+             <div aria-hidden='true' className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
             <div className="relative left-[calc(50%-13rem)] aspect-[1155/678] w-[32.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-36rem)] sm:w-[72.1875rem]" />
           </div>
+           */}
+
+
         </div>
       </div>
       {/**<section className="mx-auto my-32 max-w-5xl">
@@ -498,8 +502,8 @@ export default function Home() {
             </div>
           </li>
         </ol>
-
-        <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        {/**
+ *  <div className="mx-auto max-w-6xl px-6 lg:px-8">
           <div className="mx-auto max-w-6xl px-6 lg:px-8">
             <div className="mt-16 flow-root sm:mt-24">
               <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
@@ -515,6 +519,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+*/}
+
       </div>
     </>
   );

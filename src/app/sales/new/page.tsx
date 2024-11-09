@@ -23,7 +23,6 @@ export default function NewSalePage() {
       await createSale({
         productId: parseInt(form.productId),
         quantity: parseInt(form.quantity),
-        employeeId: parseInt(form.employeeId),
       });
       router.push('/sales');
     } catch (err: any) {
@@ -70,16 +69,6 @@ export default function NewSalePage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium">Employee ID</label>
-              <input
-                type="text"
-                name="employeeId"
-                value={form.employeeId}
-                onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
-                className="form-input mt-1 block w-full border rounded-md p-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-              />
-            </div>
             <Button type="submit" className="mt-4 w-full">
               Save Sale
             </Button>

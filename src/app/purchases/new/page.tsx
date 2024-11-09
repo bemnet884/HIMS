@@ -23,7 +23,6 @@ export default function NewPurchasePage() {
         quantity: parseInt(form.quantity),
         total: parseFloat(form.total),
         supplier: form.supplier,
-        employeeId: parseInt(form.employeeId),
       });
       router.push('/purchases');
     } catch (err) {
@@ -90,17 +89,7 @@ export default function NewPurchasePage() {
                 required // Add required validation
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium">Employee ID</label>
-              <input
-                type="text"
-                name="employeeId"
-                value={form.employeeId}
-                onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
-                className="form-input mt-1 block w-full border rounded-md p-2 shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
-                required // Add required validation
-              />
-            </div>
+
             <Button type="submit" className={`mt-4 w-full ${loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`} disabled={loading}>
               {loading ? 'Saving...' : 'Save Purchase'}
             </Button>

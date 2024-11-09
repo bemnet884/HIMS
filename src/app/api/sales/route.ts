@@ -10,7 +10,6 @@ export async function POST(request: Request) {
       productId: parseInt(data.productId),
       quantity: parseInt(data.quantity),
       total: parseFloat(data.total),
-      employeeId: parseInt(data.employeeId),
     },
   });
 

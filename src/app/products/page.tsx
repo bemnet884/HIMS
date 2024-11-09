@@ -25,6 +25,7 @@ export default async function Products() {
             >
               {/* Product Header */}
               <div className="flex justify-between items-center mb-4">
+
                 <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
                 <p className="text-sm text-gray-500">Stock: {product.stockQuantity}</p>
               </div>

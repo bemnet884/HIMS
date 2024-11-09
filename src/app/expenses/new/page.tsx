@@ -15,7 +15,6 @@ export default function NewExpensePage() {
     await createExpense({
       description: form.description,
       amount: parseFloat(form.amount),
-      employeeId: parseInt(form.employeeId),
     });
     router.push('/expenses');
   };
@@ -46,17 +45,6 @@ export default function NewExpensePage() {
                 name="amount"
                 value={form.amount}
                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                className="form-input mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Employee ID</label>
-              <input
-                type="text"
-                name="employeeId"
-                value={form.employeeId}
-                onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
                 className="form-input mt-1 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
                 required
               />

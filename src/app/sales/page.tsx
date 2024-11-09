@@ -8,7 +8,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 
 export default async function SalesList() {
   const sales = await prisma.sale.findMany({
-    include: { product: true, employee: true },
+    include: { product: true },
   });
 
   return (
@@ -30,7 +30,6 @@ export default async function SalesList() {
                 <th className="border p-2">Price</th>
                 <th className="border p-2">Total</th>
                 <th className="border p-2">Sale Date</th>
-                <th className="border p-2">Employee</th>
                 <th className="border p-2">Actions</th>
               </tr>
             </thead>
@@ -44,7 +43,6 @@ export default async function SalesList() {
                   </td>
                   <td className="border p-2">${sale.total.toFixed(2)}</td>
                   <td className="border p-2">{new Date(sale.saleDate).toLocaleDateString()}</td>
-                  <td className="border p-2">{sale.employee.name}</td>
                   <td className="border p-2 flex justify-start gap-4">
                     <Link href={`/sales/${sale.id}`}>
                       <Button>View</Button>

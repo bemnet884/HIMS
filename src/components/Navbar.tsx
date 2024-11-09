@@ -1,16 +1,13 @@
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { auth } from "@/auth";
-import { handleSignOut } from "@/actions/authActions";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { ArrowRight } from "lucide-react";
 import MobileNav from "./mobile-nav";
 import { SidebarTrigger } from "./ui/sidebar";
 import { ShineyButton } from "./ShineyButton";
-import { currentUser } from "@clerk/nextjs/server";
 
 export default async function Navbar({ className }: { className?: string }) {
-  const session = await auth();
+  const session = true;
 
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -30,7 +27,7 @@ export default async function Navbar({ className }: { className?: string }) {
                     variant: "ghost",
                     size: "sm"
                   })}>Pricing</Link>
-                  <Link href="/auth/signin" className={buttonVariants({
+                  <Link href="/auth/sign-in" className={buttonVariants({
                     variant: "ghost",
                     size: "sm"
                   })}>
@@ -38,13 +35,13 @@ export default async function Navbar({ className }: { className?: string }) {
                   </Link>
                   { /**todo: make the link to go to the sighUP page */}
                   <div className="h-8 w-px bg-gray-300" />
-                  <ShineyButton href="/auth/signup" className="relative  z-10 h-9  text-base shadow-lg transition-shadow duration-300 hover:shadow-xl">Get Started</ShineyButton>
+                  <ShineyButton href="/sign-up" className="relative  z-10 h-9  text-base shadow-lg transition-shadow duration-300 hover:shadow-xl">Get Started</ShineyButton>
 
                 </>
 
               ) : (
                 <div className="flex gap-3">
-                  <form action={handleSignOut}>
+                    <form>
                     <Button variant="ghost" type="submit">
                       Sign Out
                     </Button>

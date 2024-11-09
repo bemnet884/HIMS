@@ -18,8 +18,6 @@ export default function SaleDetailPage() {
     quantity: '',
     total: '',
     saleDate: '',
-    employeeId: '',
-    employeeName: '',
   });
   const [productPrice, setProductPrice] = useState(0);
 
@@ -34,8 +32,6 @@ export default function SaleDetailPage() {
           quantity: sale.quantity.toString(),
           total: sale.total.toString(),
           saleDate: new Date(sale.saleDate).toLocaleDateString(),
-          employeeId: sale.employeeId.toString(),
-          employeeName: sale.employee.name,
         });
         setProductPrice(sale.product.price); // Set initial product price
       } else {
@@ -79,7 +75,6 @@ export default function SaleDetailPage() {
       productId: parseInt(form.productId),
       quantity: parseInt(form.quantity),
       total: parseFloat(form.total),
-      employeeId: parseInt(form.employeeId),
     });
     setIsEditing(false);
     router.refresh(); // Refresh the page to reflect updated data
@@ -98,7 +93,6 @@ export default function SaleDetailPage() {
           <p><strong>Quantity:</strong> {form.quantity}</p>
           <p><strong>Total:</strong> ${parseFloat(form.total).toFixed(2)}</p>
           <p><strong>Date:</strong> {form.saleDate}</p>
-          <p><strong>Employee:</strong> {form.employeeName}</p>
 
           <Button
             onClick={() => setIsEditing(true)}
@@ -139,18 +133,7 @@ export default function SaleDetailPage() {
               readOnly // Make total field read-only
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-gray-100"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Employee ID</label>
-            <input
-              type="number"
-              name="employeeId"
-              value={form.employeeId}
-              onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
-
+            </div>
           <div className="flex space-x-4 mt-6">
             <Button
               type="submit"

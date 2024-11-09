@@ -1,29 +1,11 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-}
-model User {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(100)
-  email       String   @unique @db.VarChar(255)
-  passwordHash String   @db.VarChar(255)
-  role        Role     @relation(fields: [roleId], references: [id])
-  roleId      Int
-  sales       Sale[]
-  purchases   Purchase[]
-  expenses    Expense[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Role {
-  id    Int    @id @default(autoincrement())
-  name  String @unique @db.VarChar(50)
-  users User[]
 }
 
 model Product {
@@ -45,8 +27,6 @@ model Sale {
   quantity    Int
   total       Float
   saleDate    DateTime @default(now())
-  employee    User     @relation(fields: [employeeId], references: [id])
-  employeeId  Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -59,8 +39,6 @@ model Purchase {
   total       Float
   purchaseDate DateTime @default(now())
   supplier    String    @db.VarChar(255)
-  employee    User      @relation(fields: [employeeId], references: [id])
-  employeeId  Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -70,8 +48,6 @@ model Expense {
   description String   @db.VarChar(255)
   amount      Float
   expenseDate DateTime @default(now())
-  employee    User     @relation(fields: [employeeId], references: [id])
-  employeeId  Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

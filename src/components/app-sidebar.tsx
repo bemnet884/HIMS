@@ -81,8 +81,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
-import { auth } from "@/auth"
-import { handleSignOut } from "@/actions/authActions"
 import { Button } from "./ui/button"
 
 
@@ -299,7 +297,7 @@ const data = {
   ],
 }
 export async function AppSidebar() {
-  const session = await auth()
+  const session = true;
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
@@ -418,8 +416,8 @@ export async function AppSidebar() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  {
-                    session ? (<><Avatar className="h-8 w-8 rounded-lg">
+                  { /**
+                   *   session ? (<><Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
                         src={data.user.avatar}
                         alt={data.user.name}
@@ -433,7 +431,9 @@ export async function AppSidebar() {
                         <span className="truncate text-xs">
                           {session?.user.email}
                         </span>
-                      </div></>) : (
+                      </div></>) :
+                   */
+                    (
                       <>
                         <Avatar className="h-8 w-8 rounded-lg">
                           <AvatarImage
@@ -475,7 +475,8 @@ export async function AppSidebar() {
                           CN
                         </AvatarFallback>
                       </Avatar>
-                      <div className="grid flex-1 text-left text-sm leading-tight">
+                      {/**
+                       * <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
                           {session?.user.name}
                         </span>
@@ -483,6 +484,8 @@ export async function AppSidebar() {
                           {session?.user.email}
                         </span>
                       </div>
+                       */}
+
                     </div>
                   </DropdownMenuLabel></>) : (<>
                     <DropdownMenuLabel className="p-0 font-normal">
@@ -532,7 +535,7 @@ export async function AppSidebar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <LogOut />
-                  <form action={handleSignOut}>
+                  <form>
                     <Button className="text-center" variant="ghost" type="submit">
                       Sign Out
                     </Button>
