@@ -1,15 +1,7 @@
-'use client';
 import { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { getSaleById, updateSale } from "@/actions/salesAction";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 type Sale = Awaited<ReturnType<typeof getSaleById>>;
 
@@ -19,6 +11,12 @@ interface EditSaleDialogProps {
 
 export default function EditSaleDialog({ sale }: EditSaleDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Handle case where sale might be null
+  if (!sale) {
+    return null; // You can render a loading state or an error message here
+  }
+
   const [form, setForm] = useState({
     productId: sale.productId,
     quantity: sale.quantity,
@@ -32,12 +30,14 @@ export default function EditSaleDialog({ sale }: EditSaleDialogProps) {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await updateSale(sale.id, {
-      productId: form.productId,
-      quantity: form.quantity,
-      total: form.total,
-    });
-    setIsOpen(false);
+    if (sale.id) {
+      await updateSale(sale.id, {
+        productId: form.productId,
+        quantity: form.quantity,
+        total: form.total,
+      });
+      setIsOpen(false);
+    }
   };
 
   return (
