@@ -1,6 +1,3 @@
-import prisma from "@/lib/db";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import DeleteSalesButton from "@/components/DeleteSalesButton";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import { getSales } from "@/actions/salesAction";
@@ -44,7 +41,7 @@ export default async function SalesList() {
                     {new Date(sale.saleDate).toLocaleDateString()}
                   </td>
                   <td className="border p-2 flex justify-start gap-4">
-                    <EditSaleDialog sale={sale} />
+                    <EditSaleDialog />
                     <DeleteSalesButton salesId={sale.id} />
                   </td>
                 </tr>
