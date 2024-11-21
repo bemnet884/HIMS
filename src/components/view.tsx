@@ -14,7 +14,13 @@ export default function ProductDetailPage() {
     <div className="p-6">
       <Button onClick={openModal} className="bg-blue-600 text-white">View Product Details</Button>
 
-      {isModalOpen && <ProductDetailModal onClose={closeModal} />}
+      {isModalOpen && <ProductDetailModal onClose={closeModal} product={{
+        id: 0,
+        name: '',
+        description: '',
+        price: 0,
+        stockQuantity: 0
+      }} isOpen={false} />}
     </div>
   );
 }
