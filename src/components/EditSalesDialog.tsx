@@ -1,3 +1,4 @@
+'use client'
 import { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { getSaleById, updateSale } from "@/actions/salesAction";
