@@ -6,6 +6,8 @@ import "./globals.css"
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs"
 import { cn } from "@/lib/utils"
 import { LoadingSpinner } from "@/components/loading-spinner"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const eb_garamond = EB_Garamond({
@@ -25,16 +27,19 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
+      <SidebarProvider>
       <html lang="en" className={cn(inter.variable, eb_garamond.variable)}>
         <body className="min-h-[calc(100vh-1px)] flex flex-col font-sans bg-brand-50 text-brand-950 antialiased">
           <main className="relative flex-1 flex flex-col">
             <ClerkLoading><LoadingSpinner /></ClerkLoading>
-            <ClerkLoaded>
+              <ClerkLoaded>
+                <AppSidebar />
               {children}
             </ClerkLoaded>
           </main>
         </body>
-      </html>
+        </html>
+      </SidebarProvider>
     </ClerkProvider>
   )
 }

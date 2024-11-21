@@ -4,7 +4,6 @@ const EditSalesDialog = () => {
   return (
     <div>
       EditSalesDialog
-      EditSalesDialog
     </div>
   )
 }
