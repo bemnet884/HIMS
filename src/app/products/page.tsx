@@ -5,9 +5,6 @@ import DeleteProductButton from "@/components/DeleteProductButton";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import NewProductDialog from "@/components/NewProductDialog";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
-import TopSoldProducts from "@/components/TopSoldProducts"; // Import the top sold products component
-import { Button, buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
 import ProductsNavbar from "./ProductsNavbar";
 
 export default async function Products() {
@@ -43,7 +40,7 @@ export default async function Products() {
               <p className="text-lg font-bold text-green-600 mb-6">${product.price.toFixed(2)}</p>
 
               <div className="flex justify-between mt-4">
-                <ProductDetailDialog />
+                  <ProductDetailDialog product={product} />
                 <DeleteProductButton productId={product.id} />
               </div>
             </li>
