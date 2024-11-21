@@ -1,10 +1,19 @@
 'use server'
 
 import prisma from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
+async function getCurrentUserId(): Promise<number> {
+  const { userId } = await auth(); // Ensure `auth()` provides user information
+  if (!userId) {
+    throw new Error("User is not authenticated");
+  }
+  return Number(userId); // Convert to number if needed
+}
 
 export async function createSale(data: { productId: number; quantity: number }) {
   // Find the product to get its price and current stock
+   const userId = await getCurrentUserId(); 
   const product = await prisma.product.findUnique({
     where: { id: data.productId },
   });
@@ -24,6 +33,7 @@ export async function createSale(data: { productId: number; quantity: number }) 
   // Create the sale with the calculated total
   const sale = await prisma.sale.create({
     data: {
+     userId: Number(userId),
       productId: data.productId,
       quantity: data.quantity,
       total,
