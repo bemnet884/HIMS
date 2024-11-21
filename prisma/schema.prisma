@@ -13,15 +13,6 @@ model User {
   email     String    @unique
   firstName String    @db.VarChar(255)
   lastName  String    @db.VarChar(255)
-  username  String   @unique
-  isAdmin   Boolean   @default(false)
-  profilePicture String 
-}
-
-enum Role {
-  ADMIN
-  MANAGER
-  USER
 }
 
 model Product {
