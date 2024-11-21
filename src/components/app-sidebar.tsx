@@ -1,18 +1,11 @@
 
 import {
-  Calendar,
-  ChevronUp,
   Home,
-  Inbox,
-  Search,
   Settings,
-  Truck,
   Box,
   BarChart2,
   User2,
-  ChevronDown,
   DollarSign,
-  DollarSignIcon,
   ShoppingCart,
   TrendingUp,
   Bell,
@@ -25,15 +18,8 @@ import {
   Send,
   Frame,
   Settings2,
-  BookOpen,
-  Bot,
-  SquareTerminal,
   PieChart,
   Command,
-  Share,
-  Trash2,
-  Folder,
-  MoreHorizontal,
   ChevronRight,
   Salad,
   Percent,
@@ -82,7 +68,6 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Button } from "./ui/button"
-
 
 // Updated menu items for inventory management
 const items = [
@@ -296,7 +281,7 @@ const data = {
     },
   ],
 }
-export async function AppSidebar() {
+export function AppSidebar() {
   const session = true;
   return (
     <Sidebar variant="inset" collapsible="icon">

@@ -1,53 +1,78 @@
+// src/lib/getMetrics.ts (server-side only)
 import prisma from '@/lib/db';
 
 export type Metrics = {
+  totalInventoryValue: number;
   totalRevenue: number;
-  totalExpenses: number;
-  totalCOGS: number;
-  grossProfit: number;
   netProfit: number;
+  grossProfit: number;
   totalProductsSold: number;
-  revenueChange: number; // Percentage change, e.g., 5 for +5%
-  profitMargin: number; // Profit margin percentage, e.g., 20 for 20%
-  salesTrend: 'up' | 'down' | 'neutral'; // Simple trend indicator
+  revenueChange: number;
+  profitMargin: number;
+  salesTrend: 'up' | 'down' | 'neutral';
 };
 
 export async function getMetrics(): Promise<Metrics> {
-  try {
-    // Basic calculations for revenue, expenses, COGS, etc.
-    const totalSalesResult = await prisma.sale.aggregate({ _sum: { total: true } });
-    const totalRevenue = totalSalesResult._sum.total ?? 0;
+  const [totalSales, totalExpenses, totalPurchases, totalProductsSold] = await Promise.all([
+    prisma.sale.aggregate({ _sum: { total: true } }).then(res => res._sum.total || 0),
+    prisma.expense.aggregate({ _sum: { amount: true } }).then(res => res._sum.amount || 0),
+    prisma.purchase.aggregate({ _sum: { total: true } }).then(res => res._sum.total || 0),
+    prisma.sale.aggregate({ _sum: { quantity: true } }).then(res => res._sum.quantity || 0),
+  ]);
 
-    const totalExpensesResult = await prisma.expense.aggregate({ _sum: { amount: true } });
-    const totalExpenses = totalExpensesResult._sum.amount ?? 0;
+  const totalRevenue = totalSales;
+  const totalExpensesAmount = totalExpenses;
+  const totalCOGS = totalPurchases;
+  const grossProfit = totalRevenue - totalCOGS;
+  const netProfit = grossProfit - totalExpensesAmount;
+  const profitMargin = (netProfit / totalRevenue) * 100 || 0;
+  const salesTrend = totalProductsSold > 100 ? 'up' : totalProductsSold < 50 ? 'down' : 'neutral';
 
-    const totalPurchasesResult = await prisma.purchase.aggregate({ _sum: { total: true } });
-    const totalCOGS = totalPurchasesResult._sum.total ?? 0;
+  return {
+    totalInventoryValue: totalRevenue,
+    totalRevenue,
+    netProfit,
+    grossProfit,
+    totalProductsSold,
+    revenueChange: 5, // Example value, replace with actual calculation if needed
+    profitMargin,
+    salesTrend,
+  };
+}
 
-    const grossProfit = totalRevenue - totalCOGS;
-    const netProfit = grossProfit - totalExpenses;
+export async function getInventoryMonitoring() {
+  const lowStockProducts = await prisma.product.findMany({
+    where: { stockQuantity: { lt: 10 } },
+    select: { name: true, stockQuantity: true },
+  });
 
-    const totalProductsSoldResult = await prisma.sale.aggregate({ _sum: { quantity: true } });
-    const totalProductsSold = totalProductsSoldResult._sum.quantity ?? 0;
+  return { lowStockProducts };
+}
 
-    // Mock values for additional metrics
-    const revenueChange = 5; // Example percentage change (mocked)
-    const profitMargin = (netProfit / totalRevenue) * 100 || 0; // Calculate profit margin as a percentage
-    const salesTrend = totalProductsSold > 100 ? 'up' : totalProductsSold < 50 ? 'down' : 'neutral'; // Mocked sales trend
+export async function getSalesInsights() {
+  const [recentSales, topSellingProducts] = await Promise.all([
+    prisma.sale.findMany({ take: 5, orderBy: { saleDate: 'desc' } }),
+    prisma.sale.groupBy({
+      by: ['productId'],
+      _sum: { total: true },
+      orderBy: { _sum: { total: 'desc' } },
+      take: 5,
+    }),
+  ]);
 
-    return {
-      totalRevenue,
-      totalExpenses,
-      totalCOGS,
-      grossProfit,
-      netProfit,
-      totalProductsSold,
-      revenueChange,
-      profitMargin,
-      salesTrend,
-    };
-  } catch (error) {
-    console.error("Error fetching metrics:", error);
-    throw new Error("Failed to fetch metrics");
-  }
+  return { recentSales, topSellingProducts };
+}
+
+export async function getDashboardData() {
+  const [metrics, inventoryMonitoring, salesInsights] = await Promise.all([
+    getMetrics(),
+    getInventoryMonitoring(),
+    getSalesInsights(),
+  ]);
+
+  return {
+    metrics,
+    inventoryMonitoring,
+    salesInsights,
+  };
 }

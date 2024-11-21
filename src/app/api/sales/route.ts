@@ -7,6 +7,7 @@ export async function POST(request: Request) {
 
   const sale = await prisma.sale.create({
     data: {
+      userId: parseInt(data.userId),
       productId: parseInt(data.productId),
       quantity: parseInt(data.quantity),
       total: parseFloat(data.total),

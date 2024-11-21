@@ -1,112 +1,104 @@
+// components/ProductDetailModal.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getProductById, updateProduct } from '@/actions/productActions';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useRouter, useParams } from 'next/navigation';
+import { updateProduct } from '@/actions/productActions';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 interface ProductDetailModalProps {
+  product: { id: number; name: string; description: string; price: number; stockQuantity: number };
+  isOpen: boolean;
   onClose: () => void;
 }
 
-export default function ProductDetailModal({ onClose }: ProductDetailModalProps) {
-  const router = useRouter();
-  const params = useParams();
-  const productId = parseInt(params.id as string);
-
+const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, isOpen, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stockQuantity: '',
+    name: product.name,
+    description: product.description || '',
+    price: product.price.toString(),
+    stockQuantity: product.stockQuantity.toString(),
   });
 
-  useEffect(() => {
-    async function fetchProduct() {
-      const product = await getProductById(productId);
-      if (product) {
-        setForm({
-          name: product.name,
-          description: product.description || '',
-          price: product.price.toString(),
-          stockQuantity: product.stockQuantity.toString(),
-        });
-      } else {
-        router.push('/404');
-      }
-    }
-    fetchProduct();
-  }, [productId, router]);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await updateProduct(productId, {
+    await updateProduct(product.id, {
       name: form.name,
       description: form.description,
       price: parseFloat(form.price),
       stockQuantity: parseInt(form.stockQuantity),
     });
     setIsEditing(false);
-    router.refresh();
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
-        <h2 className="text-2xl font-semibold mb-4">{isEditing ? 'Edit Product' : `Product Details: ${form.name}`}</h2>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{isEditing ? 'Edit Product' : 'Product Details'}</DialogTitle>
+        </DialogHeader>
 
-        {!isEditing ? (
-          <div>
-            <p><strong>Name:</strong> {form.name}</p>
-            <p><strong>Description:</strong> {form.description}</p>
-            <p><strong>Price:</strong> ${form.price}</p>
-            <p><strong>Stock Quantity:</strong> {form.stockQuantity}</p>
-            <Button onClick={() => setIsEditing(true)} className="mt-4 bg-blue-600 text-white">Edit Product</Button>
-            <Button onClick={onClose} className="mt-4 bg-gray-300 text-gray-700">Close</Button>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium">Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="block w-full rounded-md border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Description</label>
-              <textarea
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="block w-full rounded-md border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Price</label>
-              <input
-                type="number"
-                value={form.price}
-                onChange={(e) => setForm({ ...form, price: e.target.value })}
-                className="block w-full rounded-md border-gray-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Stock Quantity</label>
-              <input
-                type="number"
-                value={form.stockQuantity}
-                onChange={(e) => setForm({ ...form, stockQuantity: e.target.value })}
-                className="block w-full rounded-md border-gray-300"
-              />
-            </div>
-            <Button type="submit" className="mt-4 bg-blue-600 text-white">Save Changes</Button>
-            <Button onClick={() => setIsEditing(false)} className="mt-4 bg-gray-300 text-gray-700">Cancel</Button>
+        {isEditing ? (
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full mb-4 p-2 border rounded"
+              placeholder="Product Name"
+            />
+            <input
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+              className="w-full mb-4 p-2 border rounded"
+              placeholder="Price"
+            />
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              className="w-full mb-4 p-2 border rounded"
+              placeholder="Description"
+            ></textarea>
+            <input
+              type="number"
+              name="stockQuantity"
+              value={form.stockQuantity}
+              onChange={handleChange}
+              className="w-full mb-4 p-2 border rounded"
+              placeholder="Stock Quantity"
+            />
+
+            <DialogFooter>
+              <Button type="submit" className="bg-blue-600 text-white">Save</Button>
+              <Button variant="secondary" onClick={() => setIsEditing(false)}>Cancel</Button>
+            </DialogFooter>
           </form>
+        ) : (
+          <div>
+            <p><strong>Name:</strong> {product.name}</p>
+            <p><strong>Description:</strong> {product.description}</p>
+            <p><strong>Price:</strong> ${product.price.toFixed(2)}</p>
+            <p><strong>Stock Quantity:</strong> {product.stockQuantity}</p>
+            <DialogFooter>
+              <Button onClick={() => setIsEditing(true)}>Edit</Button>
+              <Button variant="secondary" onClick={onClose}>Close</Button>
+            </DialogFooter>
+          </div>
         )}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
-}
+};
+
+export default ProductDetailModal;

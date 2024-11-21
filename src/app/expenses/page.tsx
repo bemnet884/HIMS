@@ -4,14 +4,16 @@ import { getExpenses } from "@/actions/expenseActions";
 import DeleteExpenseButton from "@/components/DeleteExpenseButton";
 import HeadingText from '@/components/heading-text';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
+import ExpensesNavbar from './ExpensesNavbar';
 
 export default async function ExpenseList() {
   const expenses = await getExpenses();
   return (
+    <>
+      <ExpensesNavbar />
     <div className="w-full h-screen flex items-center justify-center">
       <MaxWidthWrapper className='h-full'>
-        <div className="container mx-auto p-4">
-          <HeadingText className='text-center'>Expense List</HeadingText>
+          <div className="container mx-auto p-4">
           <div className="flex items-center justify-between">
             <Link href="/expenses/new">
               <Button>Create New Expense</Button>
@@ -23,9 +25,7 @@ export default async function ExpenseList() {
                 <th className="border p-2">Product</th>
                 <th className="border p-2">Quantity</th>
                 <th className="border p-2">Total</th>
-                <th className="border p-2">Sale Date</th>
-                <th className="border p-2">Employee</th>
-                <th className="border p-2">Actions</th>
+                  <th className="border p-2">Sale Date</th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +46,8 @@ export default async function ExpenseList() {
           </table>
         </div>
       </MaxWidthWrapper>
-    </div>
+      </div>
+    </>
+
   );
 }

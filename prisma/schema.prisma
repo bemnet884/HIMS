@@ -8,10 +8,26 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+model User {
+  clerkId   String    @unique
+  email     String    @unique
+  firstName String    @db.VarChar(255)
+  lastName  String    @db.VarChar(255)
+  username  String   @unique
+  isAdmin   Boolean   @default(false)
+  profilePicture String 
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+}
+
 model Product {
   id          Int        @id @default(autoincrement())
   name        String     @db.VarChar(255)
-  description String?
+  description String
   price       Float
   stockQuantity Int      @default(0)
   sales       Sale[]  
@@ -29,6 +45,9 @@ model Sale {
   saleDate    DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  userId      Int 
+  purchases Purchase[]
 }
 
 model Purchase {
@@ -41,6 +60,10 @@ model Purchase {
   supplier    String    @db.VarChar(255)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  userId        Int 
+
+  Sale Sale[]
 }
 
 model Expense {
@@ -50,6 +73,8 @@ model Expense {
   expenseDate DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  userId      Int 
 }
 
 model Report {
@@ -58,4 +83,6 @@ model Report {
   content     Json     // Store report data in JSON format
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  userId      Int 
 }

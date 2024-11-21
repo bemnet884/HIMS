@@ -36,3 +36,39 @@ export async function deleteProduct(id: number) {
   });
   revalidatePath('/products');
 }
+
+// actions/productActions.ts
+
+export async function getTopSoldProducts(limit = 5) {
+  // Aggregate sales data to get total quantity sold per product
+  const topSoldProducts = await prisma.sale.groupBy({
+    by: ['productId'],
+    _sum: {
+      quantity: true,
+    },
+    orderBy: {
+      _sum: {
+        quantity: 'desc',
+      },
+    },
+    take: limit,
+  });
+
+  // Get product details for each product ID in topSoldProducts
+  const products = await prisma.product.findMany({
+    where: {
+      id: {
+        in: topSoldProducts.map((sale) => sale.productId),
+      },
+    },
+    include: {
+      sales: true,
+    },
+  });
+
+  // Add total quantity sold to each product object
+  return products.map((product) => {
+    const totalQuantitySold = topSoldProducts.find((sale) => sale.productId === product.id)?._sum.quantity || 0;
+    return { ...product, totalQuantitySold };
+  });
+}

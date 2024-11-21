@@ -1,13 +1,14 @@
-import Navbar from "@/components/Navbar"
-import { ReactNode } from "react"
+// app/(landing)/layout.tsx
+import Navbar from "@/components/Navbar";
+import { ReactNode } from "react";
 
-const Layout = ({ children }: {
-  children: ReactNode
-}) => {
+const LandingLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Navbar />
       {children}
-    </>)
-}
-export default Layout
+    </>
+  );
+};
+
+export default LandingLayout;

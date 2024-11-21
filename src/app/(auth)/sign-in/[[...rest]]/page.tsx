@@ -1,7 +1,9 @@
-'use client'
-import { SignIn } from "@clerk/nextjs";
-import { useSearchParams } from "next/navigation";
-export default function Page() {
+"use client"
+
+import { SignIn } from "@clerk/nextjs"
+import { useSearchParams } from "next/navigation"
+
+const Page = () => {
   const searchParams = useSearchParams()
   const intent = searchParams.get("intent")
 
@@ -9,7 +11,10 @@ export default function Page() {
     <div className="w-full flex-1 flex items-center justify-center">
       <SignIn
         forceRedirectUrl={intent ? `/dashboard?intent=${intent}` : "/dashboard"}
+        afterSignOutUrl='/'
       />
     </div>
   )
 }
+
+export default Page

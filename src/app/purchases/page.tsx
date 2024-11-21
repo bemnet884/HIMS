@@ -5,18 +5,19 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import DeletePurchaseButton from "@/components/DeletePurchaseButton";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
+import PurchasesNavbar from "./PurchasesNavbar";
 
 export default async function PurchaseList() {
   const purchases = await prisma.purchase.findMany({
     include: { product: true },
   });
 
-  return (
+  return (<>
+    <PurchasesNavbar />
     <div className="w-full h-screen flex items-center justify-center">
       <MaxWidthWrapper className='h-full'>
         <div className="container mx-auto p-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold mb-4">Purchase List</h1>
             <Link href="/purchases/new">
               <Button>Create New Purchase</Button>
             </Link>
@@ -29,7 +30,6 @@ export default async function PurchaseList() {
                 <th className="border p-2">Quantity</th>
                 <th className="border p-2">Total</th>
                 <th className="border p-2">Purchase Date</th>
-                <th className="border p-2">Employee</th>
                 <th className="border p-2">Actions</th>
               </tr>
             </thead>
@@ -55,5 +55,7 @@ export default async function PurchaseList() {
 
       </MaxWidthWrapper>
     </div>
+  </>
+
   );
 }

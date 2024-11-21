@@ -76,7 +76,7 @@ export default function Home() {
           </div>
           <div className="w-full mt-5 max-w-80">
             <ShineyButton
-              href="/sign-up"
+              href="/dashboard"
               className="relative z-10 h-14 w-full text-base shadow-lg transition-shadow duration-300 hover:shadow-xl"
             >Manage My Inventory</ShineyButton>
           </div>
@@ -330,7 +330,7 @@ export default function Home() {
           </div>
 
           <ShineyButton
-            href="sign-in"
+            href="/dashboard"
             className="relative z-10 h-14 w-full max-w-xs text-base shadow-lg transition-shadow duration-300 hover:shadow-xl"
           >
             Start For Free Today

@@ -1,55 +1,131 @@
-import { getMetrics, Metrics } from '@/lib/getMetrics';
-import MetricCard from '@/components/MetricCard';
-import { CheckCircle, DollarSign, MessageCircleWarning, ShoppingCart, TrendingDown, TrendingUp } from 'lucide-react';
-import MaxWidthWrapper from '@/components/MaxWidthWrapper';
-import React from 'react';
-import { PieChartComponent } from '@/components/(charts)/piechart';
-import { BarChartComponent } from '@/components/(charts)/barchart';
-import SalesList from '../sales/page';
+'use client'
+// pages/dashboard.tsx
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import KeyMetricsOverview from "./KeyMetricsOverview";
+import SalesInsights from "./SalesInsights";
+import InventoryMonitoring from "./InventoryMonitoring";
+import FinancialInsights from "./FinancialInsights";
+import AlertsAndNotifications from "./AlertsAndNotifications";
+import DashboardNavbar from "./DashboardNav";
 
-const Dashboard = async () => {
-  const metrics: Metrics = await getMetrics();
+
+export default function Dashboard() {
+  const [selectedMetric, setSelectedMetric] = useState("Overview");
 
   return (
-    <div className="min-h-screen py-10">
-      <MaxWidthWrapper>
+    <div>
+      <DashboardNavbar />
+      <div className="px-4 pb-4 md:px-8 md:pb-8 lg:px-10 lg:pb-10">
+        <KeyMetricsOverview />
+        {/* Key Metrics Overview Cards
+              <section className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <Card>
+          <CardHeader>Total Inventory Value</CardHeader>
+          <CardContent className="text-lg font-bold">$45,000</CardContent>
+        </Card>
+        <Card>
+          <CardHeader>Stock Levels</CardHeader>
+          <CardContent>In Stock: 320 | Low: 45 | Out: 10</CardContent>
+        </Card>
+        <Card>
+          <CardHeader>Total Revenue</CardHeader>
+          <CardContent className="text-lg font-bold">$75,000</CardContent>
+        </Card>
+        <Card>
+          <CardHeader>Net Profit</CardHeader>
+          <CardContent>$25,000</CardContent>
+        </Card>
+      </section> */}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 my-7">
-          <MetricCard
-            title="Total Revenue"
-            amount={`$${metrics.totalRevenue.toLocaleString()}`}
-            icon={<TrendingUp className="text-green-500" />}
-            changePercentage={metrics.revenueChange}
-          />
-          <MetricCard
-            title="Total Expenses"
-            amount={`$${metrics.totalExpenses.toLocaleString()}`}
-            icon={<TrendingDown className="text-red-500" />}
-            cautionIcon={<MessageCircleWarning className="text-yellow-400" />}
-          />
-          <MetricCard
-            title="Net Profit"
-            amount={`$${metrics.netProfit.toLocaleString()}`}
-            icon={<CheckCircle className="text-blue-500" />}
-            profitMargin={metrics.profitMargin}
-          />
-          <MetricCard
-            title="Total Products Sold"
-            amount={metrics.totalProductsSold.toLocaleString()}
-            icon={<ShoppingCart className="text-indigo-500" />}
-            trendIndicator={metrics.salesTrend}
-          />
+        {/* Sales Insights 
+      */}
+        <SalesInsights />
+
+
+        <InventoryMonitoring />
+        {/* Inventory Monitoring
+      <section className="my-8">
+        <h2 className="text-xl font-semibold mb-4">Inventory Monitoring</h2>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Card>
+            <CardHeader>Stock Forecasting</CardHeader>
+            <CardContent>
+              linechart
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>Inventory Turnover</CardHeader>
+            <CardContent>15% This Month</CardContent>
+          </Card>
+          <Card>
+            <CardHeader>Low-Stock Alerts</CardHeader>
+            <CardContent>5 Items Need Restocking</CardContent>
+          </Card>
         </div>
+      </section> */}
+        <FinancialInsights />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6 my-16">
-          <PieChartComponent />
-          <BarChartComponent />
+        {/* Financial Insights
+            <section className="my-8">
+        <h2 className="text-xl font-semibold mb-4">Financial Insights</h2>
+        <Tabs>
+          <TabsList>
+            <TabsTrigger value="expenses">Expenses</TabsTrigger>
+            <TabsTrigger value="profit-margin">Profit Margin</TabsTrigger>
+            <TabsTrigger value="roi">ROI</TabsTrigger>
+          </TabsList>
+          <TabsContent value="expenses">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableCell>Expense Type</TableCell>
+                  <TableCell>Amount</TableCell>
+                </TableRow>
+
+              </TableHeader>
+              <TableRow>
+                <TableCell>Logistics</TableCell>
+                <TableCell>$5,000</TableCell>
+              </TableRow>
+            </Table>
+          </TabsContent>
+          <TabsContent value="profit-margin">
+            <BarChartComponent />
+          </TabsContent>
+          <TabsContent value="roi">
+            <PieChartComponent />
+          </TabsContent>
+        </Tabs>
+      </section> */}
+
+        <AlertsAndNotifications />
+        {/* Alerts and Notifications
+
+      <section className="my-8">
+        <h2 className="text-xl font-semibold mb-4">Alerts & Notifications</h2>
+        <div className="flex flex-col gap-4">
+          <div className="p-4 bg-red-100 text-red-700 rounded-lg">
+            Low Stock Alert: Product X needs restocking!
+          </div>
+          <div className="p-4 bg-yellow-100 text-yellow-700 rounded-lg">
+            Sales Surge Alert: Product Y has seen a 150% increase in sales!
+          </div>
         </div>
+      </section>*/}
 
-        <SalesList />
-      </MaxWidthWrapper>
+        {/* Customer Insights
+      <section className="my-8">
+        <h2 className="text-xl font-semibold mb-4">Customer Insights</h2>
+        <Card>
+          <CardHeader>Customer Segmentation</CardHeader>
+          <CardContent>
+            piechart
+          </CardContent>
+        </Card>
+      </section> */}
+
+      </div>
     </div>
   );
-};
-
-export default Dashboard;
+}
