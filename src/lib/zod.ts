@@ -18,18 +18,14 @@ export const signUpSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 // Product schema
-export const productSchema = object({
-  name: string({ required_error: "Product name is required" })
-    .min(1, "Product name is required")
-    .max(100, "Product name must be less than 100 characters"),
-  description: string()
-    .optional(),
-  price: number({ required_error: "Price is required" })
-    .positive("Price must be a positive number"),
-  stockQuantity: number({ required_error: "Stock quantity is required" })
-    .int("Stock quantity must be an integer")
-    .min(0, "Stock quantity cannot be negative"),
+
+export const productSchema = z.object({
+  name: z.string().min(1, "Product name is required"),
+  description: z.string().optional(), // Make description optional
+  price: z.number().positive("Price must be a positive number"),
+  stockQuantity: z.number().int().positive("Stock quantity must be a positive integer"),
 });
+
 
 
 export const saleSchema = object({
