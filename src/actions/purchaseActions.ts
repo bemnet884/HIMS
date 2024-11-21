@@ -1,10 +1,28 @@
 'use server';
 
 import prisma from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
 
+async function getCurrentUserId(): Promise<number> {
+  const { userId } = await auth(); // Ensure `auth()` provides user information
+  if (!userId) {
+    throw new Error("User is not authenticated");
+  }
+  return Number(userId); // Convert to number if needed
+}
+
+
 export async function createPurchase(data: { productId: number; quantity: number; total: number; supplier: string }) {
-  const purchase = await prisma.purchase.create({ data });
+     const userId = await getCurrentUserId(); 
+  const purchase = await prisma.purchase.create({
+     data: {
+      userId: Number(userId),
+      quantity: data.quantity,
+      total: data.total,
+      supplier: data.supplier,
+      productId: data.productId
+  } });
   revalidatePath('/purchases');
   return purchase;
 }
