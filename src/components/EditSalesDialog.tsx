@@ -13,9 +13,9 @@ interface EditSaleDialogProps {
 export default function EditSaleDialog({ sale }: EditSaleDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Handle case where sale might be null
+  // Render loading or error state instead of returning early
   if (!sale) {
-    return null; // You can render a loading state or an error message here
+    return <div>Loading...</div>; // Or any error message you'd prefer
   }
 
   const [form, setForm] = useState({
