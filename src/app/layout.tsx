@@ -1,9 +1,7 @@
 'use client'
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { ArrowLeft } from "lucide-react";
 import "./globals.css";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
