@@ -27,19 +27,16 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <SidebarProvider>
       <html lang="en" className={cn(inter.variable, eb_garamond.variable)}>
         <body className="min-h-[calc(100vh-1px)] flex flex-col font-sans bg-brand-50 text-brand-950 antialiased">
           <main className="relative flex-1 flex flex-col">
             <ClerkLoading><LoadingSpinner /></ClerkLoading>
-              <ClerkLoaded>
-                <AppSidebar />
+            <ClerkLoaded>
               {children}
             </ClerkLoaded>
           </main>
         </body>
-        </html>
-      </SidebarProvider>
+      </html>
     </ClerkProvider>
   )
 }
