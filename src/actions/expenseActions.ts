@@ -1,15 +1,31 @@
 'use server';
 
 import prisma from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
 
+
+async function getCurrentUserId(): Promise<number> {
+  const { userId } = await auth(); // Ensure `auth()` provides user information
+  if (!userId) {
+    throw new Error("User is not authenticated");
+  }
+  return Number(userId); // Convert to number if needed
+}
+
+
 export async function createExpense(data: { description: string; amount: number }) {
+  const userId = await getCurrentUserId(); // Await the async function
   const expense = await prisma.expense.create({
-    data,
+    data: {
+      ...data,
+      userId: Number(userId), // Ensure userId is converted to the correct type
+    },
   });
   revalidatePath('/expenses');
   return expense;
 }
+
 
 export async function getExpenses() {
   return await prisma.expense.findMany();
