@@ -1,11 +1,20 @@
 'use server'
 
 import prisma from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 import { revalidatePath } from 'next/cache';
+async function getCurrentUserId(): Promise<number> {
+  const { userId } = await auth(); // Ensure `auth()` provides user information
+  if (!userId) {
+    throw new Error("User is not authenticated");
+  }
+  return Number(userId); // Convert to number if needed
+}
 
-export async function createProduct(data: { name: string; description?: string; price: number; stockQuantity: number }) {
+export async function createProduct(data: { name: string; description: string; price: number; stockQuantity: number }) {
+  const { userId } = await auth();
   const product = await prisma.product.create({
-    data,
+      data,
   });
   revalidatePath('/products');
   return product;
