@@ -1,53 +1,41 @@
-'use client'
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import "./globals.css";
-import { usePathname } from "next/navigation";
-import { ClerkProvider, useUser } from "@clerk/nextjs";
-import { useEffect } from "react";
-import { Provider } from "@radix-ui/react-tooltip";
-import { cn } from "@/lib/utils";
-import { Inter } from "next/font/google";
-import { dark } from "@clerk/themes"
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import { EB_Garamond } from "next/font/google"
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+import "./globals.css"
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs"
+import { cn } from "@/lib/utils"
+import { LoadingSpinner } from "@/components/loading-spinner"
 
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
+const eb_garamond = EB_Garamond({
+  subsets: ["latin"],
+  variable: "--font-heading",
+})
 
-  return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>
-      <ClerkProviderWrapper children={children} />
-    </ClerkProvider>
-  );
+export const metadata: Metadata = {
+  title: "jStack App",
+  description: "Created using jStack",
+  icons: [{ rel: "icon", url: "/favicon.ico" }],
 }
 
-const ClerkProviderWrapper = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname();
-  const isLandingPage = pathname === "/";
-  const isSignInPage = pathname === "/sign-in";
-  const isSignUpPage = pathname === "/sign-up";
-  const { isSignedIn, user } = useUser();
-
-  useEffect(() => {
-    const syncUser = async () => {
-      if (isSignedIn && user) {
-        await fetch('/api/syncUser', { method: 'POST' });
-      }
-    };
-
-    syncUser();
-  }, [isSignedIn, user]);
-
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
   return (
-    <html lang="en" className="h-full bg-gray-100">
-      <body className={cn("min-h-[calc(100vh-1px)] flex flex-col font-sans bg-brand-50 text-brand-950 antialiased", inter.className)}>
-        <SidebarProvider>
-          {!isLandingPage && <AppSidebar />}
-          <main className="grainy relative flex-1 flex flex-col">
-            <Provider>{children}</Provider>
+    <ClerkProvider>
+      <html lang="en" className={cn(inter.variable, eb_garamond.variable)}>
+        <body className="min-h-[calc(100vh-1px)] flex flex-col font-sans bg-brand-50 text-brand-950 antialiased">
+          <main className="relative flex-1 flex flex-col">
+            <ClerkLoading><LoadingSpinner /></ClerkLoading>
+            <ClerkLoaded>
+              {children}
+            </ClerkLoaded>
           </main>
-        </SidebarProvider>
-      </body>
-    </html>
-  );
-};
+        </body>
+      </html>
+    </ClerkProvider>
+  )
+}
