@@ -21,12 +21,9 @@ export default async function Products() {
         <div className="flex justify-between items-center">
 
           <div className="flex items-center justify-center">
-            <Button>
-              Create New Product</Button>
-            {/**
+
             <NewProductDialog />
-             * 
-             */}
+
           </div>
         </div>
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
