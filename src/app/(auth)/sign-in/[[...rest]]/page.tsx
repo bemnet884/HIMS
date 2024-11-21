@@ -10,7 +10,6 @@ const Page = () => {
   return (
     <div className="w-full flex-1 flex items-center justify-center">
       <SignIn
-        forceRedirectUrl={intent ? `/dashboard?intent=${intent}` : "/dashboard"}
         afterSignOutUrl='/'
       />
     </div>

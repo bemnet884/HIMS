@@ -25,7 +25,8 @@ export default async function Products() {
           </div>
         </div>
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
-          {products.map((product) => (
+
+          {products.length > 0 ? products.map((product) => (
             <li
               key={product.id}
               className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300"
@@ -43,7 +44,11 @@ export default async function Products() {
                 <DeleteProductButton productId={product.id} />
               </div>
             </li>
-          ))}
+          )) :
+            (
+              <h1>No Product available</h1>
+            )
+          }
         </ul>
 
       </div>
