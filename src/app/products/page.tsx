@@ -39,7 +39,7 @@ export default async function Products() {
               <p className="text-lg font-bold text-green-600 mb-6">${product.price.toFixed(2)}</p>
 
               <div className="flex justify-between mt-4">
-                <ProductDetailDialog product={product} />
+                <ProductDetailDialog />
                 <DeleteProductButton productId={product.id} />
               </div>
             </li>
