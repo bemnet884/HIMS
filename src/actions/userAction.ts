@@ -1,12 +1,14 @@
 'use server'
-import prisma from "@/lib/db";
-import { User } from "@prisma/client";
 
-export async function createUser(data: User) {
+import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
+
+export async function createUser(data: Prisma.UserCreateInput) {
   try {
-    const user = await prisma.user.create({ data })
-    return {user}
+    const user = await prisma.user.create({ data });
+    return { user };
   } catch (error) {
-    return {error}
+    console.error("Error creating user:", error);
+    return { error };
   }
 }
