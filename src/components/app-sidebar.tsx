@@ -455,7 +455,7 @@ export async function AppSidebar() {
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage
                           src={user.imageUrl}
-                          alt={user.username}
+                          alt={"image"}
                         />
                         <AvatarFallback className="rounded-lg">
                           CN
