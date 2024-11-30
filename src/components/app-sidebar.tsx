@@ -68,6 +68,7 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Button } from "./ui/button"
+import { auth, currentUser } from "@clerk/nextjs/server"
 
 // Updated menu items for inventory management
 const items = [
@@ -281,8 +282,8 @@ const data = {
     },
   ],
 }
-export function AppSidebar() {
-  const session = true;
+export async function AppSidebar() {
+  const user = await currentUser();
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
@@ -448,28 +449,27 @@ export function AppSidebar() {
                 align="end"
                 sideOffset={4}
               >
-                {session ? (<>
+                {user ? (<>
                   <DropdownMenuLabel className="p-0 font-normal">
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage
-                          src={data.user.avatar}
-                          alt={data.user.name}
+                          src={user.imageUrl}
+                          alt={user.username}
                         />
                         <AvatarFallback className="rounded-lg">
                           CN
                         </AvatarFallback>
                       </Avatar>
-                      {/**
-                       * <div className="grid flex-1 text-left text-sm leading-tight">
+                      <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
-                          {session?.user.name}
+                          {user.username}
                         </span>
                         <span className="truncate text-xs">
-                          {session?.user.email}
+                          {user.emailAddresses[0].emailAddress}
                         </span>
                       </div>
-                       */}
+
 
                     </div>
                   </DropdownMenuLabel></>) : (<>
