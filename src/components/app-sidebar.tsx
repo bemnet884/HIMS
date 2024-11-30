@@ -69,6 +69,7 @@ import {
 import Link from "next/link"
 import { Button } from "./ui/button"
 import { auth, currentUser } from "@clerk/nextjs/server"
+import { SignIn } from "@clerk/nextjs"
 
 // Updated menu items for inventory management
 const items = [
@@ -118,11 +119,6 @@ const footerItems = [
 ]
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/images/user.png",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -402,41 +398,25 @@ export async function AppSidebar() {
                   size="lg"
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
-                  { /**
-                   *   session ? (<><Avatar className="h-8 w-8 rounded-lg">
+                  {user ? (<><Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={data.user.avatar}
-                        alt={data.user.name}
+                      src={user.imageUrl}
+                      alt={"user image"}
                       />
                       <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                     </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
                         <span className="truncate font-semibold">
-                          {session?.user.name}
+                        {user.username}
                         </span>
                         <span className="truncate text-xs">
-                          {session?.user.email}
+                        {user.emailAddresses[0].emailAddress}
                         </span>
-                      </div></>) :
-                   */
+                    </div></>) :
                     (
                       <>
-                        <Avatar className="h-8 w-8 rounded-lg">
-                          <AvatarImage
-                            src={data.user.avatar}
-                            alt={data.user.name}
-                          />
-                          <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                        </Avatar>
-                        <div className="grid flex-1 text-left text-sm leading-tight">
-                          <span className="truncate font-semibold">
-                            {data.user.name}
-                          </span>
-                          <span className="truncate text-xs">
-                            {data.user.email}
-                          </span>
-                        </div></>
-
+                        <SignIn />
+                      </>
                     )
                   }
 
@@ -455,7 +435,7 @@ export async function AppSidebar() {
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage
                           src={user.imageUrl}
-                          alt={"image"}
+                          alt={"user image"}
                         />
                         <AvatarFallback className="rounded-lg">
                           CN
@@ -469,31 +449,10 @@ export async function AppSidebar() {
                           {user.emailAddresses[0].emailAddress}
                         </span>
                       </div>
-
-
                     </div>
                   </DropdownMenuLabel></>) : (<>
-                    <DropdownMenuLabel className="p-0 font-normal">
-                      <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                        <Avatar className="h-8 w-8 rounded-lg">
-                          <AvatarImage
-                            src={data.user.avatar}
-                            alt={data.user.name}
-                          />
-                          <AvatarFallback className="rounded-lg">
-                            CN
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="grid flex-1 text-left text-sm leading-tight">
-                          <span className="truncate font-semibold">
-                            {data.user.name}
-                          </span>
-                          <span className="truncate text-xs">
-                            {data.user.email}
-                          </span>
-                        </div>
-                      </div>
-                    </DropdownMenuLabel></>)}
+                  <SignIn />
+                </>)}
 
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
