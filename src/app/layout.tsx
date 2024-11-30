@@ -32,7 +32,6 @@ export default function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <main className="relative flex-1 flex flex-col">
-              <SidebarTrigger />
               <ClerkLoading>Loading.....</ClerkLoading>
               <ClerkLoaded>
                 {children}

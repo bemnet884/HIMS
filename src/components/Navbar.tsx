@@ -14,11 +14,17 @@ export default async function Navbar({ className }: { className?: string }) {
   console.log(user?.fullName)
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
-      <MaxWidthWrapper className="px-1">
 
+      <MaxWidthWrapper className="px-1">
         <div className="flex h-14 items-center justify-between border-b border-zinc-200">
+
           <Link href="/" className="flex z-40 font-semibold">
-            <span className="text-blue-600 text-2xl font-mono">HIMS</span>
+            <div className="flex gap-4">
+              <SidebarTrigger />
+              <span className="text-blue-600 text-2xl font-mono">
+                HIMS</span>
+            </div>
+
           </Link>
 
           <MobileNav />
