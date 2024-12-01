@@ -3,7 +3,6 @@ import { Inter } from "next/font/google"
 import { EB_Garamond } from "next/font/google"
 
 import "./globals.css"
-import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs"
 import { cn } from "@/lib/utils"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -30,8 +29,7 @@ export default function RootLayout({
         <body className="min-h-[calc(100vh-1px)] flex flex-col font-sans bg-brand-50 text-brand-950 antialiased">
           <SidebarProvider>
             <AppSidebar />
-            <main className="relative flex-1 flex flex-col">
-            <SidebarTrigger />
+          <main className="relative flex-1 flex flex-col">
             {children}
             </main>
         </SidebarProvider>

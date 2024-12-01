@@ -5,13 +5,10 @@ import { ArrowRight } from "lucide-react";
 import MobileNav from "./mobile-nav";
 import { SidebarTrigger } from "./ui/sidebar";
 import { ShineyButton } from "./ShineyButton";
-import { currentUser } from "@clerk/nextjs/server";
-import { SignIn, SignOutButton, SignedIn, UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "./theme-toggle";
 
 export default async function Navbar({ className }: { className?: string }) {
-  const user = await currentUser()
-  console.log(user?.fullName)
+  const user = true;
   return (
     <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
 
@@ -41,9 +38,7 @@ export default async function Navbar({ className }: { className?: string }) {
                 Dashboard <ArrowRight className="ml-1.5 size-4" />
               </Link>
 
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
+
 
 
 

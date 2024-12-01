@@ -32,7 +32,9 @@ export default async function Products() {
               className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300"
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {product.id}
+                    {product.name}</h3>
                 <p className="text-sm text-gray-500">Stock: {product.stockQuantity}</p>
               </div>
 

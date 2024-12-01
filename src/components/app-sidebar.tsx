@@ -68,8 +68,6 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { auth, currentUser } from "@clerk/nextjs/server"
-import { SignIn } from "@clerk/nextjs"
 
 // Updated menu items for inventory management
 const items = [
@@ -279,7 +277,7 @@ const data = {
   ],
 }
 export async function AppSidebar() {
-  const user = await currentUser();
+  const user = true;
   return (
     <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader>
@@ -388,8 +386,9 @@ export async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      {/**footer */}
-      <SidebarFooter>
+      {/**footer
+       *
+       * <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -415,7 +414,7 @@ export async function AppSidebar() {
                     </div></>) :
                     (
                       <>
-                        <SignIn />
+                        <Button>SignIn</Button>
                       </>
                     )
                   }
@@ -451,7 +450,7 @@ export async function AppSidebar() {
                       </div>
                     </div>
                   </DropdownMenuLabel></>) : (<>
-                  <SignIn />
+                    <Button>Sign in</Button>
                 </>)}
 
                 <DropdownMenuSeparator />
@@ -490,6 +489,8 @@ export async function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+       */}
+
     </Sidebar>
   )
 }
