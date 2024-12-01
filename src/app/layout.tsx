@@ -26,21 +26,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
       <html lang="en" className={cn(inter.variable, eb_garamond.variable)}>
         <body className="min-h-[calc(100vh-1px)] flex flex-col font-sans bg-brand-50 text-brand-950 antialiased">
           <SidebarProvider>
             <AppSidebar />
             <main className="relative flex-1 flex flex-col">
-              <ClerkLoading>Loading.....</ClerkLoading>
-              <ClerkLoaded>
-                {children}
-              </ClerkLoaded>
+            <SidebarTrigger />
+            {children}
             </main>
-          </SidebarProvider>
-
+        </SidebarProvider>
         </body>
-      </html>
-    </ClerkProvider>
+    </html>
   )
 }

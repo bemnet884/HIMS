@@ -1,56 +1,89 @@
-import prisma from "@/lib/db";
-import { clerkClient } from "@clerk/nextjs/server";
-import { IncomingHttpHeaders } from "http";
+import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { Webhook, WebhookRequiredHeaders } from "svix";
+import { Webhook } from "svix";
 
-const webhookSecret = process.env.WEBHOOK_SECRET || "";
+import { createUser } from "@/actions/userAction";
 
-async function handler(request: Request) {
-  const payload = await request.json();
-  const headersList = headers();
-  const heads = {
-    "svix-id": headersList.get("svix-id"),
-    "svix-timestamp": headersList.get("svix-timestamp"),
-    "svix-signature": headersList.get("svix-signature"),
-  };
-  const wh = new Webhook(webhookSecret);
-  let evt: Event | null = null;
+export async function POST(req: Request) {
+  // Fetch Webhook Secret from the environment
+  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
-  try {
-    evt = wh.verify(
-      JSON.stringify(payload),
-      heads as IncomingHttpHeaders & WebhookRequiredHeaders
-    ) as Event;
-  } catch (err) {
-    console.error((err as Error).message);
-    return NextResponse.json({}, { status: 400 });
+  if (!WEBHOOK_SECRET) {
+    throw new Error(
+      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
+    );
   }
 
-  const eventType: EventType = evt.type;
-  if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, ...attributes } = evt.data;
+  // Retrieve headers
+  const headerPayload = headers();
+  const svix_id = headerPayload.get("svix-id");
+  const svix_timestamp = headerPayload.get("svix-timestamp");
+  const svix_signature = headerPayload.get("svix-signature");
 
-    await prisma.user.upsert({
-      where: { externalId: id as string },
-      create: {
-        externalId: id as string,
-        attributes,
-      },
-      update: { attributes },
+  // Validate the presence of required headers
+  if (!svix_id || !svix_timestamp || !svix_signature) {
+    return new Response("Error occurred -- missing svix headers", {
+      status: 400,
     });
   }
-}
 
-type EventType = "user.created" | "user.updated" | "*";
+  // Parse the body payload
+  const payload = await req.json();
+  const body = JSON.stringify(payload);
 
-type Event = {
-  data: Record<string, string | number>;
-  object: "event";
-  type: EventType;
+  // Verify the webhook payload
+  const wh = new Webhook(WEBHOOK_SECRET);
+  let evt: WebhookEvent;
+
+  try {
+    evt = wh.verify(body, {
+      "svix-id": svix_id,
+      "svix-timestamp": svix_timestamp,
+      "svix-signature": svix_signature,
+    }) as WebhookEvent;
+  } catch (err) {
+    console.error("Error verifying webhook:", err);
+    return new Response("Error occurred", {
+      status: 400,
+    });
+  }
+
+  // Extract the ID and type from the event
+  const { id } = evt.data;
+  const eventType = evt.type;
+
+  if (eventType === "user.created") {
+    // Extract relevant data from the webhook
+    const { id: clerkId, email_addresses, first_name, last_name } =
+      evt.data;
+
+    // Build user data that matches the CreateUserInput type
+  const user = {
+      clerkId,
+      email: email_addresses[0]?.email_address || "",
+      firstName: first_name || "Unknown",
+      lastName: last_name || "Unknown",
+      createdAt: new Date(),
+      updatedAt: new Date(),
 };
 
-export const GET = handler;
-export const POST = handler;
-export const PUT = handler;
+
+    console.log("Creating user:", user);
+
+    // Save the user to the database
+    const { user: newUser, error } = await createUser(user);
+
+    if (error) {
+      console.error("Error creating user:", error);
+      return NextResponse.json({ message: "Failed to create user", error }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "New user created", user: newUser });
+  }
+
+  console.log(`Webhook with ID ${id} and type ${eventType}`);
+  console.log("Webhook body:", body);
+
+  return new Response("", { status: 200 });
+}
