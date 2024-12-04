@@ -16,7 +16,7 @@ export default async function PurchaseList() {
     <PurchasesNavbar />
     <div className="w-full h-screen flex items-center justify-center">
       <MaxWidthWrapper className='h-full'>
-        <div className="container mx-auto p-4">
+        <div className="mx-auto p-4">
           <div className="flex items-center justify-between">
             <Link href="/purchases/new">
               <Button>Create New Purchase</Button>
