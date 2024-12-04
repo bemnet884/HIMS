@@ -10,7 +10,12 @@ async function getCurrentUserId(): Promise<number> {
   }
   return Number(userId);
 }
-
+export async function getSaleById(id: number) {
+  return await prisma.sale.findUnique({
+    where: { id },
+    include: { product: true },
+  });
+}
 export async function createSale(data: { productId: number; quantity: number }) {
   const userId = await getCurrentUserId();
   const product = await prisma.product.findUnique({
@@ -60,4 +65,21 @@ export async function getMonthlySalesData() {
   }, [] as { month: string; total: number }[]);
 
   return monthlyData;
+}
+
+export async function updateSale(id: number, data: {
+  productId?: number; quantity?: number; total?: number;
+}) {
+  await prisma.sale.update({
+    where: { id },
+    data,
+  });
+  revalidatePath(`/sales/${id}`);
+}
+
+export async function deleteSale(id: number) {
+  await prisma.sale.delete({
+    where: { id },
+  });
+  revalidatePath('/sales'); // Revalidate the sales list page
 }
