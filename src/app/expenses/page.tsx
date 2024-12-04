@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getExpenses } from "@/actions/expenseActions";
 import DeleteExpenseButton from "@/components/DeleteExpenseButton";
-import HeadingText from '@/components/heading-text';
 import MaxWidthWrapper from '@/components/MaxWidthWrapper';
 import ExpensesNavbar from './ExpensesNavbar';
 
