@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 
-export default function NewSalePage({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function NewSalePage() {
+  const [isOpen, setIsOpen] = useState(false); // Internal state for the dialog
   const [form, setForm] = useState({
     productId: '',
     quantity: '',
@@ -23,7 +24,7 @@ export default function NewSalePage({ isOpen, setIsOpen }: { isOpen: boolean, se
         productId: parseInt(form.productId),
         quantity: parseInt(form.quantity),
       });
-      setIsOpen(false); 
+      setIsOpen(false);
       router.push('/sales');
     } catch (err: any) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again later.');
