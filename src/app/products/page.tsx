@@ -4,6 +4,7 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import NewProductDialog from "@/components/NewProductDialog";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import ProductsNavbar from "./ProductsNavbar";
+import { SetStateAction } from "react";
 
 export default async function Products() {
   const products = await getProducts();
@@ -31,7 +32,10 @@ export default async function Products() {
                 >
                   {/* Product Header */}
                   <div className="flex flex-wrap justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+                    <span className="text-sm text-gray-600">Id:{product.id}
+                    </span>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {product.name}</h3>
                     <p className="text-sm text-gray-500">Stock: {product.stockQuantity}</p>
                   </div>
 

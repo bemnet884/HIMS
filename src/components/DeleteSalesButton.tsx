@@ -1,4 +1,3 @@
-// components/DeleteSalesButton.tsx
 'use client';
 
 import { useState } from 'react';
@@ -14,9 +13,13 @@ const DeleteSalesButton: React.FC<DeleteSalesButtonProps> = ({ salesId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDelete = async () => {
-    await deleteSale(salesId);
-    // Optionally, refresh the product list or redirect
-    window.location.reload(); // Or implement a better way to refresh the list
+    try {
+      await deleteSale(salesId);
+      // Optionally refresh the product list or related data
+      window.location.reload(); // Replace with a more efficient refresh if possible
+    } catch (error) {
+      console.error('Error deleting sale:', error);
+    }
   };
 
   return (
@@ -28,7 +31,7 @@ const DeleteSalesButton: React.FC<DeleteSalesButtonProps> = ({ salesId }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleDelete}
-        message="Are you sure you want to delete this product?"
+        message="Are you sure you want to delete this sale? This action will also update related product quantities."
       />
     </>
   );

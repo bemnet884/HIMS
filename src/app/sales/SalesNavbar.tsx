@@ -7,9 +7,12 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ShineyButton } from "@/components/ShineyButton";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import MobileNav from "@/components/mobile-nav";
+import { useState } from "react";
+import NewSalePage from "./new/page";
 
 const SalesNavbar = () => {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   // Function to handle going back
@@ -21,7 +24,7 @@ const SalesNavbar = () => {
   };
   const navItems = [
     { label: "All Sales", icon: <List />, path: "/sales" },
-    { label: "Add Sale", icon: <Plus />, path: "/sales/add" },
+    { label: "Add Sale", icon: <Plus />, path: "#", isDialog: true },
     { label: "Top Sellers", icon: <TrendingUp />, path: "/sales/top-sellers" },
     { label: "Revenue", icon: <DollarSign />, path: "/sales/revenue" },
   ];
@@ -50,6 +53,15 @@ const SalesNavbar = () => {
                     <Button
                       variant="ghost"
                       className={`flex items-center gap-2 p-2 rounded-lg transition ${pathname === item.path ? "bg-gray-200" : "hover:bg-gray-200"}`}
+                      onClick={() => {
+                        if (item.isDialog) {
+                          // Trigger modal open when 'Add Product' is clicked
+                          setIsOpen(true);
+                        } else {
+                          // Navigate to the respective page
+                          router.push(item.path);
+                        }
+                      }}
                     >
                       {item.icon}
                       <span>{item.label}</span>
@@ -71,6 +83,8 @@ const SalesNavbar = () => {
             </div>
           </div>
         </div>
+        {/* Conditionally render NewProductDialog based on isOpen */}
+        {isOpen && <NewSalePage isOpen={isOpen} setIsOpen={setIsOpen} />}
       </nav>
     </>
   );

@@ -10,6 +10,8 @@ async function getCurrentUserId(): Promise<number> {
   }
   return Number(userId);
 }
+
+
 export async function getSaleById(id: number) {
   return await prisma.sale.findUnique({
     where: { id },
@@ -67,19 +69,63 @@ export async function getMonthlySalesData() {
   return monthlyData;
 }
 
-export async function updateSale(id: number, data: {
-  productId?: number; quantity?: number; total?: number;
-}) {
-  await prisma.sale.update({
-    where: { id },
-    data,
-  });
-  revalidatePath(`/sales/${id}`);
+export async function updateSale(id: number, data: { productId: number; quantity: number; total: number; saleDate: Date }) {
+  const sale = await prisma.sale.findUnique({ where: { id }, include: { product: true } });
+  if (!sale) throw new Error(`Sale with ID ${id} not found`);
+
+  const product = await prisma.product.findUnique({ where: { id: data.productId } });
+  if (!product) throw new Error(`Product with ID ${data.productId} not found`);
+
+  // Adjust stock quantity
+  const stockAdjustment = data.quantity - sale.quantity; // Positive = more stock required; Negative = stock returned
+  if (product.stockQuantity < stockAdjustment) {
+    throw new Error("Insufficient stock for the requested quantity adjustment");
+  }
+
+  await prisma.$transaction([
+    prisma.sale.update({
+      where: { id },
+      data: {
+        productId: data.productId,
+        quantity: data.quantity,
+        total: product.price * data.quantity,
+      },
+    }),
+    prisma.product.update({
+      where: { id: data.productId },
+      data: { stockQuantity: product.stockQuantity - stockAdjustment },
+    }),
+  ]);
+
+  revalidatePath(`/sales`);
 }
 
 export async function deleteSale(id: number) {
-  await prisma.sale.delete({
+  const sale = await prisma.sale.findUnique({
     where: { id },
+    include: { product: true },
   });
+
+  if (!sale) {
+    throw new Error(`Sale with ID ${id} not found`);
+  }
+
+  const productId = sale.productId;
+  const product = await prisma.product.findUnique({
+    where: { id: productId },
+  });
+
+  if (!product) {
+    throw new Error(`Product with ID ${productId} not found`);
+  }
+
+  await prisma.$transaction([
+    prisma.sale.delete({ where: { id } }),
+    prisma.product.update({
+      where: { id: productId },
+      data: { stockQuantity: product.stockQuantity + sale.quantity },
+    }),
+  ]);
+
   revalidatePath('/sales'); // Revalidate the sales list page
 }

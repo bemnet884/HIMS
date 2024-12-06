@@ -1,5 +1,3 @@
-// /components/NewProductDialog.tsx
-
 "use client";
 
 import { useState } from "react";
@@ -9,7 +7,8 @@ import { productSchema } from "@/lib/zod";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-export default function NewProductDialog() {
+// Accept `isOpen` and `setIsOpen` as props
+export default function NewProductDialog({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -17,13 +16,11 @@ export default function NewProductDialog() {
     stockQuantity: "",
   });
   const [errors, setErrors] = useState<any>({});
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate form data with Zod schema
     const parsedData = productSchema.safeParse({
       name: form.name,
       description: form.description,
@@ -94,7 +91,6 @@ export default function NewProductDialog() {
               value={form.stockQuantity}
               onChange={(e) => setForm({ ...form, stockQuantity: e.target.value })}
               className="form-input mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-
             />
             {errors.stockQuantity && <p className="text-red-500">{errors.stockQuantity._errors[0]}</p>}
           </div>

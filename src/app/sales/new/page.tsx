@@ -7,13 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
 
-export default function NewSalePage() {
+export default function NewSalePage({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [form, setForm] = useState({
     productId: '',
     quantity: '',
   });
   const [error, setError] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,8 +23,8 @@ export default function NewSalePage() {
         productId: parseInt(form.productId),
         quantity: parseInt(form.quantity),
       });
+      setIsOpen(false); 
       router.push('/sales');
-      setIsModalOpen(false);
     } catch (err: any) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again later.');
     }
@@ -33,9 +32,9 @@ export default function NewSalePage() {
 
   return (
     <div className="flex items-center justify-center p-4">
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
-          <Button onClick={() => setIsModalOpen(true)} className="w-full max-w-md bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 ease-in-out rounded-lg">
+          <Button onClick={() => setIsOpen(true)} className="w-full max-w-md bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-700 transition duration-200 ease-in-out rounded-lg">
             Add New Sale
           </Button>
         </DialogTrigger>

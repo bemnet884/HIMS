@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import DeletePurchaseButton from "@/components/DeletePurchaseButton";
 import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import PurchasesNavbar from "./PurchasesNavbar";
+import NewPurchasePage from "./new/page";
+import EditPurchaseDialog from "@/components/EditPurchaseDialog";
 
 export default async function PurchaseList() {
   const purchases = await prisma.purchase.findMany({
@@ -18,14 +20,13 @@ export default async function PurchaseList() {
       <MaxWidthWrapper className='h-full'>
         <div className="mx-auto p-4">
           <div className="flex items-center justify-between">
-            <Link href="/purchases/new">
-              <Button>Create New Purchase</Button>
-            </Link>
+            <NewPurchasePage />
           </div>
 
           <table className="w-full mt-4 table-auto">
             <thead>
               <tr>
+                <th className="border p-2">ID</th>
                 <th className="border p-2">Product</th>
                 <th className="border p-2">Quantity</th>
                 <th className="border p-2">Total</th>
@@ -36,15 +37,14 @@ export default async function PurchaseList() {
             <tbody>
               {purchases.map((purchase) => (
                 <tr key={purchase.id}>
+                  <td className="border p-2">{purchase.product.id}</td>
                   <td className="border p-2">{purchase.product.name}</td>
                   <td className="border p-2">{purchase.quantity}</td>
                   <td className="border p-2">${purchase.total.toFixed(2)}</td>
                   <td className="border p-2">{new Date(purchase.purchaseDate).toLocaleDateString()}</td>
 
-                  <td className="border p-2">
-                    <Link href={`/purchases/${purchase.id}`}>
-                      <Button>View</Button>
-                    </Link>
+                  <td className="border p-2 flex gap-4">
+                    <EditPurchaseDialog purchase={purchase} />
                     <DeletePurchaseButton purchaseId={purchase.id} />
                   </td>
                 </tr>

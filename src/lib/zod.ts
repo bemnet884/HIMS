@@ -29,13 +29,8 @@ export const productSchema = z.object({
 
 
 export const saleSchema = object({
-  productId: string({ required_error: "Product ID is required" })
-    .regex(/^\d+$/, "Product ID must be a valid number"), // Ensure it's a number string
+  productId: number({ required_error: "Product ID is required" }),
   quantity: number({ required_error: "Quantity is required" })
     .int("Quantity must be an integer")
     .min(1, "Quantity must be at least 1"),
-  total: number({ required_error: "Total is required" })
-    .positive("Total must be a positive number"),
-  employeeId: string({ required_error: "Employee ID is required" })
-    .regex(/^\d+$/, "Employee ID must be a valid number"), // Ensure it's a number string
 });
