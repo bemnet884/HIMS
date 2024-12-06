@@ -84,7 +84,7 @@ const SalesNavbar = () => {
           </div>
         </div>
         {/* Conditionally render NewProductDialog based on isOpen */}
-        {isOpen && <NewSalePage isOpen={isOpen} setIsOpen={setIsOpen} />}
+        {isOpen && <NewSalePage />}
       </nav>
     </>
   );
