@@ -75,6 +75,7 @@ export default function SaleDetailPage() {
       productId: parseInt(form.productId),
       quantity: parseInt(form.quantity),
       total: parseFloat(form.total),
+      saleDate: new Date
     });
     setIsEditing(false);
     router.refresh(); // Refresh the page to reflect updated data

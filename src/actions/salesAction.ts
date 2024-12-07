@@ -69,7 +69,7 @@ export async function getMonthlySalesData() {
   return monthlyData;
 }
 
-export async function updateSale(id: number, data: { productId: number; quantity: number; total: number; saleDate: Date }) {
+export async function updateSale(id: number, data: { productId: number; quantity: number; total: number; saleDate?: Date }) {
   const sale = await prisma.sale.findUnique({ where: { id }, include: { product: true } });
   if (!sale) throw new Error(`Sale with ID ${id} not found`);
 
