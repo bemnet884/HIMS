@@ -76,7 +76,7 @@ const ProductsNavbar = () => {
         </div>
       </div>
       {/* Conditionally render NewProductDialog based on isOpen */}
-      {isOpen && <NewProductDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {isOpen && <NewProductDialog />}
     </nav>
   );
 };
